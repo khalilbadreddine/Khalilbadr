@@ -1,19 +1,25 @@
 import { Figure, standingPose } from './figure'
 import { clamp, rotY } from './math'
+import { addGlobe } from './globe'
 import { addOrbit } from './orbit'
 import { DotRig } from './rig'
 import type { SceneFactory, SceneInput } from './types'
 
 /**
  * About me: a big-headed figure that waves. The head pivots at the neck so
- * the top of the head leans toward the cursor.
+ * the top of the head leans toward the cursor. Beside it, a dotted globe
+ * with the Rabat → France journey.
  */
+const FIGURE_X = 0.2
+const GLOBE_AT: [number, number, number] = [-0.3, 0.17, -0.05]
+
 export const chibiScene: SceneFactory = (count, { head }) => {
   const rig = new DotRig(count)
-  const figure = new Figure(rig, head, rig.share(0.85), 0.52, 0.5)
-  const orbit = addOrbit(rig, rig.share(0.03), { radius: 0.5, tilt: 1.25, roll: 0.3, speed: 0.5 })
+  const figure = new Figure(rig, head, rig.share(0.64), 0.52, 0.5)
+  const globe = addGlobe(rig, rig.share(0.2), 0.17)
+  const orbit = addOrbit(rig, rig.share(0.03), { radius: 0.25, tilt: 1.2, roll: 0.35, speed: 0.7 })
   const dust = rig.part()
-  rig.fillDust(dust, 0.75, 0.7)
+  rig.fillDust(dust, 0.95, 0.7)
 
   const pose = standingPose()
   const rootY = -figure.height / 2 + 0.29
@@ -28,7 +34,7 @@ export const chibiScene: SceneFactory = (count, { head }) => {
 
     let target = { yaw: Math.sin(t * 0.5) * 0.2, pitch: 0, roll: Math.sin(t * 0.7) * 0.1 }
     if (input.hasPointer) {
-      const dx = input.pointer.x
+      const dx = input.pointer.x - FIGURE_X
       const dy = input.pointer.y - neckY
       target = {
         // Tilt so the top of the head points at the cursor…
@@ -43,7 +49,7 @@ export const chibiScene: SceneFactory = (count, { head }) => {
     look.pitch += (target.pitch - look.pitch) * k
     look.roll += (target.roll - look.roll) * k
 
-    pose.root = [0, rootY + bounce, 0]
+    pose.root = [FIGURE_X, rootY + bounce, 0]
     pose.yaw = look.yaw * 0.25
     pose.lean = Math.sin(t * 1.2) * 0.03
     pose.head = look
@@ -53,10 +59,11 @@ export const chibiScene: SceneFactory = (count, { head }) => {
 
     figure.pose(pose)
     rig.set(dust, [0, 0, 0], rotY(t * 0.05))
-    orbit(t, [0, 0.05, 0])
+    globe(t, GLOBE_AT)
+    orbit(t, GLOBE_AT)
     rig.apply()
   }
   update(0, { pointer: { x: 0, y: 0 }, hasPointer: false })
 
-  return { id: 'chibi', aspect: 0.8, parallax: 0.25, dotSize: 0.75, gain: 0.6, data: rig.data, update }
+  return { id: 'chibi', aspect: 1.3, parallax: 0.25, dotSize: 0.75, gain: 0.6, data: rig.data, update }
 }
