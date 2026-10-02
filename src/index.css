@@ -1,0 +1,126 @@
+:root {
+  --bg: #05070d;
+  --text: #eef2ff;
+  --muted: #8b95b0;
+  --accent: #2563eb;
+  --accent-soft: #7aa7ff;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at 70% 40%, #0b1430 0%, var(--bg) 60%) fixed, var(--bg);
+  color: var(--text);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+.panel {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(16px, 7vw, 120px);
+}
+
+.copy {
+  max-width: min(36rem, 42vw);
+}
+
+.kicker {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+  margin: 0 0 1rem;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+}
+
+h2 {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+}
+
+.lead {
+  color: var(--muted);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.6;
+  margin: 1.25rem 0 0;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.links a {
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid rgba(122, 167, 255, 0.35);
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.links a:hover {
+  background: rgba(37, 99, 235, 0.25);
+  border-color: var(--accent-soft);
+}
+
+.hint {
+  margin-top: 3rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+@media (max-width: 720px) {
+  .panel {
+    align-items: flex-end;
+    padding-bottom: 12vh;
+  }
+
+  .copy {
+    max-width: none;
+    padding: 1.25rem;
+    margin: 0 -1.25rem;
+    background: linear-gradient(to top, rgba(5, 7, 13, 0.92) 60%, rgba(5, 7, 13, 0));
+  }
+
+  .hint {
+    margin-top: 1.5rem;
+  }
+}
