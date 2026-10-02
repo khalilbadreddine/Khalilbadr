@@ -4,6 +4,7 @@
   --muted: #8b95b0;
   --accent: #2563eb;
   --accent-soft: #7aa7ff;
+  --accent-text: #4d8dff;
   color-scheme: dark;
 }
 
@@ -14,7 +15,7 @@
 html,
 body {
   margin: 0;
-  background: radial-gradient(ellipse at 70% 40%, #0b1430 0%, var(--bg) 60%) fixed, var(--bg);
+  background: var(--bg);
   color: var(--text);
   font-family: 'Space Grotesk', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -34,6 +35,7 @@ main {
 }
 
 .panel {
+  position: relative;
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
@@ -46,12 +48,99 @@ main {
 }
 
 .kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent-soft);
+  color: var(--text);
+  opacity: 0.85;
   margin: 0 0 1rem;
+}
+
+/* A short rule ending in a glowing dot, after the kicker. */
+.kicker::after {
+  content: '';
+  width: 3rem;
+  height: 1px;
+  background: linear-gradient(to right, rgba(122, 167, 255, 0.6), rgba(122, 167, 255, 0.2));
+}
+
+.kicker::before {
+  content: '';
+  order: 2;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  margin-left: -0.75rem;
+  background: var(--accent-soft);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.accent {
+  color: var(--accent-text);
+}
+
+.counter {
+  position: absolute;
+  top: clamp(20px, 5vh, 48px);
+  left: clamp(16px, 7vw, 120px);
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.counter span {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.motto {
+  position: absolute;
+  top: clamp(20px, 5vh, 48px);
+  right: clamp(16px, 5vw, 80px);
+  margin: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  line-height: 1.9;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.footnote {
+  position: absolute;
+  bottom: clamp(20px, 5vh, 48px);
+  left: clamp(16px, 7vw, 120px);
+  margin: 0;
+  padding-left: 1.5rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Dotted vertical line in front of the footnote. */
+.footnote::before {
+  content: '';
+  position: absolute;
+  left: 0.3rem;
+  top: 50%;
+  width: 3px;
+  height: 1.5rem;
+  transform: translateY(-50%);
+  background: radial-gradient(circle, var(--accent-soft) 1.2px, transparent 1.6px) 0 0 / 3px 6px repeat-y;
+}
+
+.tagline {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 1rem 0 0;
+  max-width: 30rem;
 }
 
 h1,
@@ -85,6 +174,9 @@ h2 {
 }
 
 .links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--text);
   text-decoration: none;
   border: 1px solid rgba(122, 167, 255, 0.35);
@@ -99,17 +191,64 @@ h2 {
   border-color: var(--accent-soft);
 }
 
-.hint {
-  margin-top: 3rem;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 0.75rem;
-  color: var(--muted);
-  opacity: 0.8;
+.points {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 0.75rem;
 }
 
+.points li {
+  position: relative;
+  padding-left: 1.25rem;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+}
+
+.points strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.chips {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chips li {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--text);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.14);
+  border: 1px solid rgba(122, 167, 255, 0.25);
+}
+
+
 @media (max-width: 720px) {
+  /* The dot scene sits in the top half of the screen; text flows below it. */
   .panel {
-    align-items: flex-end;
+    align-items: flex-start;
+    padding-top: 50svh;
     padding-bottom: 12vh;
   }
 
@@ -117,10 +256,15 @@ h2 {
     max-width: none;
     padding: 1.25rem;
     margin: 0 -1.25rem;
-    background: linear-gradient(to top, rgba(5, 7, 13, 0.92) 60%, rgba(5, 7, 13, 0));
+    border-radius: 16px;
+    background: linear-gradient(to bottom, rgba(5, 7, 13, 0), rgba(5, 7, 13, 0.88) 3rem);
   }
 
-  .hint {
-    margin-top: 1.5rem;
+  .motto {
+    top: 12svh;
+  }
+
+  .footnote {
+    display: none;
   }
 }
